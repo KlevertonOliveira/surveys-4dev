@@ -1,7 +1,9 @@
 
 import { faker } from "@faker-js/faker";
 import { test, expect, type Page } from "@playwright/test";
-import { mockEmailInUseError, mockInvalidReturnData, mockSuccessfulRequest, mockUnexpectedError } from "../api-mocks/api-mocks";
+import * as HTTP from "../api-mocks/api-mocks";
+
+const url = "/signup";
 
 const populateFieldsCorrectly = async (page: Page) => {
   const password = faker.internet.password();
@@ -19,7 +21,7 @@ const simulateValidSubmit = async (page: Page) => {
 
 test.describe("SignUp", () => {
   test.beforeEach(async ({ page, baseURL }) => {
-    await page.goto(`${baseURL}/signup`, { waitUntil: "load" });
+    await page.goto(`${baseURL}${url}`, { waitUntil: "load" });
     await expect(page.getByTestId("signup-form")).toBeVisible();
   });
 
@@ -77,33 +79,33 @@ test.describe("SignUp", () => {
   });
 
   test("Should present EmailInUserError on 403", async ({ page, baseURL }) => {
-    await mockEmailInUseError(page, "/signup");
+    await HTTP.mockForbiddenError(page, url);
 
     await simulateValidSubmit(page);
 
     await expect(page.getByTestId("formErrorMessage")).toBeVisible();
     await expect(page.getByTestId("formErrorMessage")).toHaveText("Email already in use!");
-    expect(page.url()).toEqual(`${baseURL}/signup`);
+    expect(page.url()).toEqual(`${baseURL}${url}`);
   });
 
   test("Should present UnexpectedError on default error cases", async ({ page, baseURL }) => {
-    await mockUnexpectedError(page, "/signup");
+    await HTTP.mockServerError(page, url);
 
     await simulateValidSubmit(page);
 
     await expect(page.getByTestId("formErrorMessage")).toBeVisible();
     await expect(page.getByTestId("formErrorMessage")).toHaveText("Something went wrong. Try again later.");
-    expect(page.url()).toEqual(`${baseURL}/signup`);
+    expect(page.url()).toEqual(`${baseURL}${url}`);
   });
 
   test("Should present UnexpectedError if invalid data is returned", async ({ page, baseURL }) => {
-    await mockInvalidReturnData(page, "/signup");
+    await HTTP.mockInvalidReturnData(page, url);
 
     await simulateValidSubmit(page);
 
     await expect(page.getByTestId("formErrorMessage")).toBeVisible();
     await expect(page.getByTestId("formErrorMessage")).toHaveText("Something went wrong. Try again later.");
-    expect(page.url()).toEqual(`${baseURL}/signup`);
+    expect(page.url()).toEqual(`${baseURL}${url}`);
   });
 
   test("Should present correct account information if valid credentials are provided", async ({ page, baseURL }) => {
@@ -112,9 +114,9 @@ test.describe("SignUp", () => {
       name: faker.person.firstName()
     };
 
-    await mockSuccessfulRequest({
+    await HTTP.mockSuccessfulRequest({
       page,
-      url: "/signup",
+      url,
       response: account,
     });
 
@@ -127,9 +129,9 @@ test.describe("SignUp", () => {
   test("Should prevent multiple submits", async ({ page }) => {
     let signUpCallsCount = 0;
 
-    await mockSuccessfulRequest({
+    await HTTP.mockSuccessfulRequest({
       page,
-      url: "/signup",
+      url,
       response: { accessToken: faker.string.uuid() },
       callback: () => { signUpCallsCount++; }
     });
@@ -143,9 +145,9 @@ test.describe("SignUp", () => {
   test("Should prevent submit if form is invalid", async ({ page, baseURL }) => {
     let signUpCallsCount = 0;
 
-    await mockSuccessfulRequest({
+    await HTTP.mockSuccessfulRequest({
       page,
-      url: "/signup",
+      url,
       response: { accessToken: faker.string.uuid() },
       callback: () => { signUpCallsCount++; }
     });
@@ -156,7 +158,7 @@ test.describe("SignUp", () => {
     await page.getByTestId("email").press("Enter");
 
     expect(signUpCallsCount).toBe(0);
-    expect(page.url()).toEqual(`${baseURL}/signup`);
+    expect(page.url()).toEqual(`${baseURL}${url}`);
   });
 
 });
