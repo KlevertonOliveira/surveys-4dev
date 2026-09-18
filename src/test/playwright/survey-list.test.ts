@@ -22,4 +22,12 @@ test.describe("SurveyListPage", () => {
     await expect(errorMessage).toBeVisible();
     await expect(errorMessage).toHaveText("Something went wrong. Try again later.");
   });
+
+  test("Should logout on forbidden error (AccessDeniedError)", async ({ page, baseURL }) => {
+    await HTTP.mockForbiddenError(page, apiURL);
+    await page.goto(`${baseURL}/`, { waitUntil: "load" });
+
+    await page.waitForURL("**/login");
+    expect(page.url()).toEqual(`${baseURL}/login`);
+  });
 });
