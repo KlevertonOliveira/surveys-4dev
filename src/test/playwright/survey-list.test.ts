@@ -1,6 +1,7 @@
 import { mockAccountModel } from "@/domain/test";
 import { test, expect } from "@playwright/test";
 import * as HTTP from "@/test/api-mocks/api-mocks";
+import type { AccountModel } from "@/domain/models";
 
 const apiURL = "/surveys";
 
@@ -29,5 +30,19 @@ test.describe("SurveyListPage", () => {
 
     await page.waitForURL("**/login");
     expect(page.url()).toEqual(`${baseURL}/login`);
+  });
+
+  test("Should present correct username", async ({ page, baseURL }) => {
+    await HTTP.mockServerError(page, apiURL);
+    await page.goto(`${baseURL}/`, { waitUntil: "load" });
+
+    const account: AccountModel = await page.evaluate(() => {
+      return JSON.parse(localStorage.getItem("account")!);
+    });
+
+    const username = page.getByTestId("username");
+
+    await expect(username).toBeVisible();
+    await expect(username).toHaveText(account.name);
   });
 });
