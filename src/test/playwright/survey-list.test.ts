@@ -45,4 +45,16 @@ test.describe("SurveyListPage", () => {
     await expect(username).toBeVisible();
     await expect(username).toHaveText(account.name);
   });
+
+  test("Should logout and redirect to '/login' on logout button click", async ({ page, baseURL }) => {
+    await HTTP.mockServerError(page, apiURL);
+    await page.goto(`${baseURL}/`, { waitUntil: "load" });
+
+    const logoutButton = page.getByTestId("logout-button");
+
+    await expect(logoutButton).toBeVisible();
+    await logoutButton.click();
+
+    expect(page.url()).toEqual(`${baseURL}/login`);
+  });
 });
