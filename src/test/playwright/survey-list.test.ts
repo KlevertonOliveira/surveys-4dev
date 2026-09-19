@@ -3,6 +3,7 @@ import { mockAccountModel } from "@/domain/test";
 import { test, expect } from "@playwright/test";
 import * as HTTP from "@/test/api-mocks/api-mocks";
 import type { AccountModel } from "@/domain/models";
+import surveys from "@/test/fixtures/surveys.json" with { type: "json" };
 
 const apiURL = "/surveys";
 
@@ -63,12 +64,41 @@ test.describe("SurveyListPage", () => {
     await HTTP.mockSuccessfulRequest({
       page,
       url: apiURL,
-      response: {},
+      response: surveys,
       callback: async () => await new Promise(() => { })
     });
 
     await page.goto(`${baseURL}/`, { waitUntil: "load" });
 
     await expect(page.getByTestId("skeleton-survey-item")).toHaveCount(4);
+  });
+
+  test("Should present survey items when fetch is successful", async ({ page, baseURL }) => {
+    await HTTP.mockSuccessfulRequest({
+      page,
+      url: apiURL,
+      response: surveys,
+    });
+
+    await page.goto(`${baseURL}/`, { waitUntil: "load" });
+
+    const surveyItems = page.getByTestId("survey-item");
+
+    await expect(surveyItems).toHaveCount(2);
+
+    const firstItem = surveyItems.first();
+    expect(firstItem.getByTestId("check-icon")).toBeVisible();
+    expect(firstItem.getByTestId("question")).toHaveText("Question 1");
+    expect(firstItem.getByTestId("day")).toHaveText("16");
+    expect(firstItem.getByTestId("month")).toHaveText("May");
+    expect(firstItem.getByTestId("year")).toHaveText("2026");
+
+    const secondItem = surveyItems.nth(1);
+    expect(secondItem.getByTestId("question-mark-icon")).toBeVisible();
+    expect(secondItem.getByTestId("question")).toHaveText("Question 2");
+    expect(secondItem.getByTestId("day")).toHaveText("15");
+    expect(secondItem.getByTestId("month")).toHaveText("Mar");
+    expect(secondItem.getByTestId("year")).toHaveText("2024");
+
   });
 });
