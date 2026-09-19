@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { mockAccountModel } from "@/domain/test";
 import { test, expect } from "@playwright/test";
 import * as HTTP from "@/test/api-mocks/api-mocks";
@@ -56,5 +57,18 @@ test.describe("SurveyListPage", () => {
     await logoutButton.click();
 
     expect(page.url()).toEqual(`${baseURL}/login`);
+  });
+
+  test("Should present skeleton survey items when fetching data", async ({ page, baseURL }) => {
+    await HTTP.mockSuccessfulRequest({
+      page,
+      url: apiURL,
+      response: {},
+      callback: async () => await new Promise(() => { })
+    });
+
+    await page.goto(`${baseURL}/`, { waitUntil: "load" });
+
+    await expect(page.getByTestId("skeleton-survey-item")).toHaveCount(4);
   });
 });
