@@ -26,6 +26,25 @@ test.describe("SurveyListPage", () => {
     await expect(errorMessage).toHaveText("Something went wrong. Try again later.");
   });
 
+  test("Should refetch on retry button click", async ({ page, baseURL }) => {
+    await HTTP.mockServerError(page, apiURL);
+    await page.goto(`${baseURL}/`, { waitUntil: "load" });
+
+    await expect(page.getByTestId("error-message")).toHaveText("Something went wrong. Try again later.");
+
+    await HTTP.mockSuccessfulRequest({
+      page,
+      url: apiURL,
+      response: surveys,
+    });
+
+    const retryButton = page.getByTestId("retry-button");
+    await expect(retryButton).toBeVisible();
+    await retryButton.click();
+
+    await expect(page.getByTestId("survey-item")).toHaveCount(2);
+  });
+
   test("Should logout on forbidden error (AccessDeniedError)", async ({ page, baseURL }) => {
     await HTTP.mockForbiddenError(page, apiURL);
     await page.goto(`${baseURL}/`, { waitUntil: "load" });
@@ -99,6 +118,5 @@ test.describe("SurveyListPage", () => {
     expect(secondItem.getByTestId("day")).toHaveText("15");
     expect(secondItem.getByTestId("month")).toHaveText("Mar");
     expect(secondItem.getByTestId("year")).toHaveText("2024");
-
   });
 });
