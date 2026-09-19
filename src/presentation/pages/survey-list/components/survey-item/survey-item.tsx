@@ -29,7 +29,7 @@ export default function SurveyItem({ survey }: Props): React.JSX.Element {
             {survey.date.getDate().toString().padStart(2, "0")}
           </span>
 
-          <span className="lowercase m-0 mb-1" data-testid="month">
+          <span className="m-0 mb-1" data-testid="month">
             {survey.date.toLocaleDateString("en-US", { month: "short" })}
           </span>
 
