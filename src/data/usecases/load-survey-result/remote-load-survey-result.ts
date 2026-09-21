@@ -13,17 +13,12 @@ export class RemoteLoadSurveyResult implements LoadSurveyResult {
     const httpResponse = await this.httpGetClient.get({ url: this.url });
 
     switch (httpResponse.statusCode) {
-      case HttpStatusCode.forbidden:
-        throw new AccessDeniedError();
-
-      case HttpStatusCode.notFound:
-      case HttpStatusCode.serverError:
-        throw new UnexpectedError();
-
-      default: return {
+      case HttpStatusCode.ok: return {
         ...httpResponse.body!,
         date: new Date(httpResponse.body!.date)
       };
+      case HttpStatusCode.forbidden: throw new AccessDeniedError();
+      default: throw new UnexpectedError();
     }
   }
 }
