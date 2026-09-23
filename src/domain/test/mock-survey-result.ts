@@ -6,6 +6,7 @@ export const mockSurveyResult = (): SurveyResultModel => {
     surveyId: faker.string.uuid(),
     question: faker.word.words(5),
     date: faker.date.recent(),
+    isCurrentAccountAnswer: faker.datatype.boolean(),
     answers: [
       {
         answer: faker.lorem.words(8),

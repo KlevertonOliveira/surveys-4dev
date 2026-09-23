@@ -10,4 +10,5 @@ export type SurveyResultModel = {
   question: string;
   date: Date;
   answers: Answer[];
+  isCurrentAccountAnswer: boolean;
 };
