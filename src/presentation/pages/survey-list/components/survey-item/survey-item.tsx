@@ -24,7 +24,7 @@ export default function SurveyItem({ survey }: Props): React.JSX.Element {
         bg-no-repeat 
         bg-size-[100%_100%]"
       >
-        <Calendar date={survey.date} />
+        <Calendar date={survey.date} className="ml-4" />
 
         <p className="text-xl m-6 self-center grow" data-testid="question">
           {survey.question}
