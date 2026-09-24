@@ -4,7 +4,7 @@ import FlipMove from "react-flip-move";
 
 export default function SurveyResultPage() {
   return (
-    <div className="flex flex-col min-h-screen h-full justify-between bg-disabled-background">
+    <div className="flex flex-col min-h-screen h-full justify-between bg-background">
       <Header />
 
       <div className="flex flex-col self-center max-w-200 grow w-full px-5 py-10">
@@ -20,7 +20,7 @@ export default function SurveyResultPage() {
         <FlipMove className="flex flex-col gap-4">
           <li
             className={`flex justify-between bg-white items-center p-4 rounded-lg text-primaryDark 
-              ${true ? "border-2 border-primaryLight" : ""}`}
+                ${true ? "border-2 border-primaryLight" : ""}`}
           >
             <img
               src="https://media.istockphoto.com/id/1166522199/pt/foto/react-programming-web-app-paper-speech-bubble-and-mobile-display-concept-on-blue-background.jpg?s=1024x1024&w=is&k=20&c=ztDuELERlHreYt_f6C-vP0KtNCOfCWdmb1yYtAVn80c="
