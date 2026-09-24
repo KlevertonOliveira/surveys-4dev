@@ -3,7 +3,7 @@ type Props = {
   onRetry: () => void;
 };
 
-export default function SurveyFetchError({ error, onRetry }: Props) {
+export default function Error({ error, onRetry }: Props) {
   return (
     <div className="flex flex-col gap-4 items-center text-center bg-white p-10 rounded-lg shadow-md">
 

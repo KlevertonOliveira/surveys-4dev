@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import type { LoadSurveyList } from "@/domain/usecases";
-import { Footer, Header } from "@/presentation/components";
-import { SurveyItem, SurveyItemSkeleton, SurveyList, SurveyFetchError } from "./components/";
+import { Footer, Header, Error } from "@/presentation/components";
+import { SurveyItem, SurveyItemSkeleton, SurveyList } from "./components/";
 
 type Props = {
   loadSurveyList: LoadSurveyList;
@@ -43,7 +43,7 @@ export default function SurveyListPage({ loadSurveyList }: Props) {
         )}
 
         {(!isFetching && isError) && (
-          <SurveyFetchError
+          <Error
             error={error}
             onRetry={() => refetch()}
           />
