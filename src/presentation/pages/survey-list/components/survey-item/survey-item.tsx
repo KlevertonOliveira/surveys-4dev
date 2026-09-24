@@ -1,5 +1,5 @@
 import type { SurveyModel } from "@/domain/models";
-import { Icon, IconName } from "@/presentation/components";
+import { Calendar, Icon, IconName } from "@/presentation/components";
 import type React from "react";
 
 type Props = {
@@ -24,19 +24,7 @@ export default function SurveyItem({ survey }: Props): React.JSX.Element {
         bg-no-repeat 
         bg-size-[100%_100%]"
       >
-        <time className="flex flex-col bg-primaryLight text-white rounded-lg ml-4 w-15 h-25 items-center self-center justify-center shrink-0">
-          <span className="text-4xl font-bold" data-testid="day">
-            {survey.date.getDate().toString().padStart(2, "0")}
-          </span>
-
-          <span className="m-0 mb-1" data-testid="month">
-            {survey.date.toLocaleDateString("en-US", { month: "short" })}
-          </span>
-
-          <span data-testid="year">
-            {survey.date.getFullYear()}
-          </span>
-        </time>
+        <Calendar date={survey.date} />
 
         <p className="text-xl m-6 self-center grow" data-testid="question">
           {survey.question}
