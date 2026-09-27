@@ -1,6 +1,11 @@
-export default function SurveyResultSkeleton() {
+import type { JSX } from "react/jsx-runtime";
+
+export default function SurveyResultSkeleton(): JSX.Element {
   return (
-    <div className="flex flex-col self-center max-w-200 grow w-full px-5 py-10 animate-pulse">
+    <div
+      data-testid="survey-result-skeleton"
+      className="flex flex-col self-center max-w-200 grow w-full px-5 py-10 animate-pulse"
+    >
 
       <hgroup className="flex items-center mb-4 gap-4">
         <div className="w-20 h-25 rounded-lg bg-disabled-background" />

@@ -1,30 +1,45 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+
 import { Calendar, Footer, Header } from "@/presentation/components";
-import { SurveyResultItem } from "./components";
+import { SurveyResultItem, SurveyResultSkeleton } from "./components";
+import { useQuery } from "@tanstack/react-query";
+import type { JSX } from "react/jsx-runtime";
 import FlipMove from "react-flip-move";
 
-export default function SurveyResultPage() {
+export default function SurveyResultPage(): JSX.Element {
+  const { isLoading } = useQuery({
+    queryKey: [""],
+    queryFn: () => { },
+  });
+
   return (
     <div className="flex flex-col min-h-screen h-full justify-between bg-background">
       <Header />
 
-      <div className="flex flex-col self-center max-w-200 grow w-full px-5 py-10">
+      {isLoading && <SurveyResultSkeleton />}
 
-        <hgroup className="flex items-center mb-4 gap-4">
-          <Calendar date={new Date()} className="w-20" />
+      {!isLoading && (
+        <div
+          data-testid="survey-result"
+          className="flex flex-col self-center max-w-200 grow w-full px-5 py-10"
+        >
+          <hgroup className="flex items-center mb-4 gap-4">
+            <Calendar date={new Date()} className="w-20" />
 
-          <h2 className="text-primaryDark text-2xl font-bold uppercase mb-6">
-            What&apos;s your favorite web framework?
-          </h2>
-        </hgroup>
+            <h2 className="text-primaryDark text-2xl font-bold uppercase mb-6">
+              What&apos;s your favorite web framework?
+            </h2>
+          </hgroup>
 
-        <FlipMove className="flex flex-col gap-4">
-          <SurveyResultItem />
-        </FlipMove>
+          <FlipMove className="flex flex-col gap-4">
+            <SurveyResultItem />
+          </FlipMove>
 
-        <button className="mt-6">
-          Back
-        </button>
-      </div>
+          <button className="mt-6">
+            Back
+          </button>
+        </div>
+      )}
 
       <Footer />
     </div>
