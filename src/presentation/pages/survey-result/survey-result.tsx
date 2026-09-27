@@ -1,15 +1,20 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
+ 
 
 import { Calendar, Footer, Header } from "@/presentation/components";
 import { SurveyResultItem, SurveyResultSkeleton } from "./components";
 import { useQuery } from "@tanstack/react-query";
 import type { JSX } from "react/jsx-runtime";
 import FlipMove from "react-flip-move";
+import type { LoadSurveyResult } from "@/domain/usecases";
 
-export default function SurveyResultPage(): JSX.Element {
+type Props = {
+  loadSurveyResult: LoadSurveyResult;
+};
+
+export default function SurveyResultPage({ loadSurveyResult }: Props): JSX.Element {
   const { isLoading } = useQuery({
-    queryKey: [""],
-    queryFn: () => { },
+    queryKey: ["load-survey-result"],
+    queryFn: async () => loadSurveyResult.load(),
   });
 
   return (
