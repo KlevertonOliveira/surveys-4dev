@@ -4,16 +4,20 @@ import { generateTestRouter, TestQueryClientProvider } from "@/utils/test";
 import { routeAuth } from "@/utils/route-auth";
 import { mockAccountModel } from "@/domain/test";
 import { RouterProvider } from "@tanstack/react-router";
+import { LoadSurveyResultSpy } from "@/presentation/test";
 
 type SutTypes = {
   router: ReturnType<typeof generateTestRouter>;
+  loadSurveyResultSpy: LoadSurveyResultSpy;
 };
 
 const makeSut = (): SutTypes => {
+  const loadSurveyResultSpy = new LoadSurveyResultSpy();
+
   const router = generateTestRouter({
     initialLocation: '/surveys',
     rootRoutecomponent: (
-      <SurveyResultPage />
+      <SurveyResultPage loadSurveyResult={loadSurveyResultSpy} />
     ),
     context: {
       routeAuth: {
@@ -30,7 +34,8 @@ const makeSut = (): SutTypes => {
   );
 
   return {
-    router
+    router,
+    loadSurveyResultSpy
   };
 };
 
@@ -41,5 +46,11 @@ describe('SurveyResult Component', () => {
 
     expect(screen.getByTestId("survey-result-skeleton")).toBeInTheDocument();
     expect(screen.queryByTestId("error-message")).not.toBeInTheDocument();
+  });
+
+  test("Should call LoadSurveyResult", async () => {
+    const { loadSurveyResultSpy } = makeSut();
+    await screen.findByRole("banner");
+    expect(loadSurveyResultSpy.callsCount).toBe(1);
   });
 });
