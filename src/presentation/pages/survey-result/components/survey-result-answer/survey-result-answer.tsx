@@ -1,17 +1,21 @@
-/* eslint-disable no-constant-condition */
 import type { SurveyResultAnswer } from "@/domain/models";
 import type { JSX } from "react/jsx-runtime";
 
 type Props = {
   answer: SurveyResultAnswer;
+  isCurrentAccountAnswer: boolean;
 };
 
-export default function SurveyResultAnswer({ answer }: Props): JSX.Element {
+export default function SurveyResultAnswer({
+  answer,
+  isCurrentAccountAnswer
+}: Props): JSX.Element {
   return (
     <li
+      data-active={isCurrentAccountAnswer}
       data-testid="survey-result-answer"
       className={`flex justify-between bg-white items-center p-4 rounded-lg text-primaryDark 
-      ${true ? "border-2 border-primaryLight" : ""}`}
+      ${isCurrentAccountAnswer ? "border-2 border-primaryLight" : ""}`}
     >
       {answer.image && (
         <img
