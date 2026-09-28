@@ -6,6 +6,7 @@ import { routeAuth } from "@/utils/route-auth";
 import { generateTestRouter, TestQueryClientProvider } from "@/utils/test";
 import { RouterProvider } from "@tanstack/react-router";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 type SutTypes = {
   router: ReturnType<typeof generateTestRouter>;
@@ -87,5 +88,24 @@ describe('SurveyResult Component', () => {
     expect(errorMessage).toHaveTextContent(error.message);
     expect(screen.queryByTestId("survey-result")).not.toBeInTheDocument();
     expect(screen.queryByTestId("survey-result-skeleton")).not.toBeInTheDocument();
+  });
+
+  test("Should call LoadSurveyResult on refetch", async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy();
+    const error = new UnexpectedError();
+
+    vi.spyOn(loadSurveyResultSpy, "load").mockRejectedValueOnce(error);
+    makeSut(loadSurveyResultSpy);
+
+    expect(await screen.findByTestId("error-message")).toBeInTheDocument();
+
+    const retryButton = screen.getByTestId("retry-button");
+
+    const user = userEvent.setup();
+    await user.click(retryButton);
+
+    // With the error mocked above, the callsCount was never updated since the "load" failed.
+    // Thus, as the retry button calls "load" (now without mocked errors), the callsCount should be 1
+    expect(loadSurveyResultSpy.callsCount).toBe(1);
   });
 });
