@@ -72,7 +72,23 @@ describe('SurveyResult Component', () => {
     expect(screen.getByTestId("year")).toHaveTextContent("2020");
     expect(screen.getByTestId("question")).toHaveTextContent(surveyResult.question);
     expect(screen.getAllByTestId("survey-result-answer")).toHaveLength(2);
+    expect(screen.getByTestId("return-button")).toBeInTheDocument();
     expect(screen.queryByTestId("error-message")).not.toBeInTheDocument();
+  });
+
+  test("Should return to survey list page ('/') when user clicks the 'Back' button", async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy();
+    loadSurveyResultSpy.surveyResult = mockSurveyResult();
+
+    const { router } = makeSut(loadSurveyResultSpy);
+
+    await screen.findByTestId("survey-result");
+    const returnButton = screen.getByTestId("return-button");
+
+    userEvent.setup();
+    await userEvent.click(returnButton);
+
+    expect(router.state.location.pathname).toBe("/");
   });
 
   test("Should render error on UnexpectedError", async () => {
