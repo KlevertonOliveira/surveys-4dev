@@ -1,20 +1,18 @@
-import { render, screen } from "@testing-library/react";
-import { SurveyResultPage } from "@/presentation/pages";
-import { generateTestRouter, TestQueryClientProvider } from "@/utils/test";
-import { routeAuth } from "@/utils/route-auth";
+import { UnexpectedError } from "@/domain/errors";
 import { mockAccountModel, mockSurveyResult } from "@/domain/test";
-import { RouterProvider } from "@tanstack/react-router";
+import { SurveyResultPage } from "@/presentation/pages";
 import { LoadSurveyResultSpy } from "@/presentation/test";
+import { routeAuth } from "@/utils/route-auth";
+import { generateTestRouter, TestQueryClientProvider } from "@/utils/test";
+import { RouterProvider } from "@tanstack/react-router";
+import { render, screen } from "@testing-library/react";
 
 type SutTypes = {
   router: ReturnType<typeof generateTestRouter>;
   loadSurveyResultSpy: LoadSurveyResultSpy;
 };
 
-const makeSut = (surveyResult = mockSurveyResult()): SutTypes => {
-  const loadSurveyResultSpy = new LoadSurveyResultSpy();
-  loadSurveyResultSpy.surveyResult = surveyResult;
-
+const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
   const router = generateTestRouter({
     initialLocation: '/surveys',
     rootRoutecomponent: (
@@ -60,7 +58,11 @@ describe('SurveyResult Component', () => {
       ...mockSurveyResult(),
       date: new Date("2020-01-12T00:00:00")
     };
-    makeSut(surveyResult);
+
+    const loadSurveyResultSpy = new LoadSurveyResultSpy();
+    loadSurveyResultSpy.surveyResult = surveyResult;
+
+    makeSut(loadSurveyResultSpy);
 
     await screen.findByTestId("survey-result");
 
@@ -70,5 +72,20 @@ describe('SurveyResult Component', () => {
     expect(screen.getByTestId("question")).toHaveTextContent(surveyResult.question);
     expect(screen.getAllByTestId("survey-result-answer")).toHaveLength(2);
     expect(screen.queryByTestId("error-message")).not.toBeInTheDocument();
+  });
+
+  test("Should render error on UnexpectedError", async () => {
+    const loadSurveyResultSpy = new LoadSurveyResultSpy();
+    const error = new UnexpectedError();
+
+    vi.spyOn(loadSurveyResultSpy, "load").mockRejectedValueOnce(error);
+    makeSut(loadSurveyResultSpy);
+
+    const errorMessage = await screen.findByTestId("error-message");
+
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent(error.message);
+    expect(screen.queryByTestId("survey-result")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("survey-result-skeleton")).not.toBeInTheDocument();
   });
 });
