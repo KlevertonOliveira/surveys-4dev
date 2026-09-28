@@ -1,4 +1,4 @@
-import { Calendar, Footer, Header } from "@/presentation/components";
+import { Calendar, Error, Footer, Header } from "@/presentation/components";
 import { SurveyResultSkeleton, SurveyResultAnswer } from "./components";
 import { useQuery } from "@tanstack/react-query";
 import type { JSX } from "react/jsx-runtime";
@@ -10,7 +10,13 @@ type Props = {
 };
 
 export default function SurveyResultPage({ loadSurveyResult }: Props): JSX.Element {
-  const { data: surveyResult, isLoading } = useQuery({
+  const {
+    data: surveyResult,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useQuery({
     queryKey: ["load-survey-result"],
     queryFn: async () => loadSurveyResult.load(),
   });
@@ -55,6 +61,13 @@ export default function SurveyResultPage({ loadSurveyResult }: Props): JSX.Eleme
             Back
           </button>
         </div>
+      )}
+
+      {!isLoading && isError && (
+        <Error
+          error={error}
+          onRetry={() => refetch()}
+        />
       )}
 
       <Footer />
