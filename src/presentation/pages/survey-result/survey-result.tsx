@@ -4,12 +4,15 @@ import { useQuery } from "@tanstack/react-query";
 import type { JSX } from "react/jsx-runtime";
 import FlipMove from "react-flip-move";
 import type { LoadSurveyResult } from "@/domain/usecases";
+import { useNavigate } from "@tanstack/react-router";
 
 type Props = {
   loadSurveyResult: LoadSurveyResult;
 };
 
 export default function SurveyResultPage({ loadSurveyResult }: Props): JSX.Element {
+  const navigate = useNavigate();
+
   const {
     data: surveyResult,
     isLoading,
@@ -57,7 +60,11 @@ export default function SurveyResultPage({ loadSurveyResult }: Props): JSX.Eleme
             ))}
           </FlipMove>
 
-          <button className="mt-6">
+          <button
+            className="mt-6"
+            data-testid="return-button"
+            onClick={() => navigate({ to: "/" })}
+          >
             Back
           </button>
         </div>
