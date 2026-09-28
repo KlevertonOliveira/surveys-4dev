@@ -1,11 +1,11 @@
- 
 
-import { Calendar, Footer, Header } from "@/presentation/components";
-import { SurveyResultItem, SurveyResultSkeleton } from "./components";
-import { useQuery } from "@tanstack/react-query";
+
 import type { JSX } from "react/jsx-runtime";
 import FlipMove from "react-flip-move";
+import { useQuery } from "@tanstack/react-query";
+import { Calendar, Footer, Header } from "@/presentation/components";
 import type { LoadSurveyResult } from "@/domain/usecases";
+import { SurveyResultAnswer, SurveyResultSkeleton } from "./components";
 
 type Props = {
   loadSurveyResult: LoadSurveyResult;
@@ -37,7 +37,7 @@ export default function SurveyResultPage({ loadSurveyResult }: Props): JSX.Eleme
           </hgroup>
 
           <FlipMove className="flex flex-col gap-4">
-            <SurveyResultItem />
+            <SurveyResultAnswer />
           </FlipMove>
 
           <button className="mt-6">
