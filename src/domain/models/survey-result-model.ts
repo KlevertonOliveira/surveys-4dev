@@ -1,4 +1,4 @@
-type Answer = {
+export type SurveyResultAnswer = {
   image?: string;
   answer: string;
   count: number;
@@ -9,6 +9,6 @@ export type SurveyResultModel = {
   surveyId: string;
   question: string;
   date: Date;
-  answers: Answer[];
+  answers: SurveyResultAnswer[];
   isCurrentAccountAnswer: boolean;
 };
