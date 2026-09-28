@@ -13,12 +13,14 @@ export default function SurveyResultAnswer({ answer }: Props): JSX.Element {
       className={`flex justify-between bg-white items-center p-4 rounded-lg text-primaryDark 
       ${true ? "border-2 border-primaryLight" : ""}`}
     >
-      <img
-        src={answer.image}
-        alt="React"
-        className="w-12 h-12 mr-4"
-        data-testid="image"
-      />
+      {answer.image && (
+        <img
+          src={answer.image}
+          alt={answer.answer}
+          className="w-12 h-12 mr-4"
+          data-testid="image"
+        />
+      )}
 
       <span
         className="grow my-0 mr-4 text-xl"
