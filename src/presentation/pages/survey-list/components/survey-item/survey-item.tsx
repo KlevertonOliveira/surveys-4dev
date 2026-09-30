@@ -1,5 +1,6 @@
 import type { SurveyModel } from "@/domain/models";
 import { Calendar, Icon, IconName } from "@/presentation/components";
+import { Link } from "@tanstack/react-router";
 import type React from "react";
 
 type Props = {
@@ -31,10 +32,14 @@ export default function SurveyItem({ survey }: Props): React.JSX.Element {
         </p>
       </div>
 
-      <footer className="bg-primary hover:bg-primaryDark text-white leading-10 lowercase text-center cursor-pointer rounded-b-lg"
+      <Link
+        className="bg-primary hover:bg-primaryDark text-white leading-10 lowercase text-center cursor-pointer rounded-b-lg"
+        to="/surveys/$surveyId"
+        params={{ surveyId: survey.id }}
+        data-testid="go-to-result-link"
       >
         See Result
-      </footer>
+      </Link>
     </li>
   );
 }
