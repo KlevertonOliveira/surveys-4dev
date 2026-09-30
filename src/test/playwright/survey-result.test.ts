@@ -5,6 +5,7 @@ import * as HTTP from "@/test/api-mocks/api-mocks";
 import surveyResult from "@/test/fixtures/survey-result.json" with { type: "json" };
 
 const apiURL = "/surveys/any_id/results";
+const getPageURL = (baseURL: string) => `${baseURL}/surveys/any_id`;
 
 test.describe("SurveyResultPage", () => {
   test.beforeEach(async ({ page }) => {
@@ -17,7 +18,7 @@ test.describe("SurveyResultPage", () => {
 
   test("Should present error message on UnexpectedError", async ({ page, baseURL }) => {
     await HTTP.mockServerError(page, apiURL);
-    await page.goto(`${baseURL}/surveys/any_id`, { waitUntil: "load" });
+    await page.goto(getPageURL(baseURL!), { waitUntil: "load" });
 
     const errorMessage = page.getByTestId("error-message");
 
@@ -27,7 +28,7 @@ test.describe("SurveyResultPage", () => {
 
   test("Should refetch on retry button click", async ({ page, baseURL }) => {
     await HTTP.mockServerError(page, apiURL);
-    await page.goto(`${baseURL}/surveys/any_id`, { waitUntil: "load" });
+    await page.goto(getPageURL(baseURL!), { waitUntil: "load" });
 
     await expect(page.getByTestId("error-message")).toHaveText("Something went wrong. Try again later.");
 
@@ -42,5 +43,13 @@ test.describe("SurveyResultPage", () => {
     await retryButton.click();
 
     await expect(page.getByTestId("question")).toHaveText(surveyResult.question);
+  });
+
+  test("Should logout on forbidden error (AccessDeniedError)", async ({ page, baseURL }) => {
+    await HTTP.mockForbiddenError(page, apiURL);
+    await page.goto(getPageURL(baseURL!), { waitUntil: "load" });
+
+    await page.waitForURL("**/login");
+    expect(page.url()).toEqual(`${baseURL}/login`);
   });
 });
