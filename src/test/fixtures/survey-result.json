@@ -1,0 +1,20 @@
+{
+  "surveyId": "testId",
+  "question": "Question 1",
+  "date": "2026-05-16T00:00:00",
+  "isCurrentAccountAnswer": "false",
+  "answers": [
+    {
+      "answer": "Lorem ipsum 0001",
+      "count": 30,
+      "percent": 52,
+      "image": ""
+    },
+    {
+      "answer": "Lorem ipsum 0002",
+      "count": 30,
+      "percent": 48,
+      "image": ""
+    }
+  ]
+}
