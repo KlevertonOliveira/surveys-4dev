@@ -9,16 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SurveysRouteImport } from './routes/surveys'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SurveysSurveyIdRouteImport } from './routes/surveys/$surveyId'
 
-const SurveysRoute = SurveysRouteImport.update({
-  id: '/surveys',
-  path: '/surveys',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -34,50 +29,48 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SurveysSurveyIdRoute = SurveysSurveyIdRouteImport.update({
+  id: '/surveys/$surveyId',
+  path: '/surveys/$surveyId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/surveys': typeof SurveysRoute
+  '/surveys/$surveyId': typeof SurveysSurveyIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/surveys': typeof SurveysRoute
+  '/surveys/$surveyId': typeof SurveysSurveyIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
-  '/surveys': typeof SurveysRoute
+  '/surveys/$surveyId': typeof SurveysSurveyIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/signup' | '/surveys'
+  fullPaths: '/' | '/login' | '/signup' | '/surveys/$surveyId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/signup' | '/surveys'
-  id: '__root__' | '/' | '/login' | '/signup' | '/surveys'
+  to: '/' | '/login' | '/signup' | '/surveys/$surveyId'
+  id: '__root__' | '/' | '/login' | '/signup' | '/surveys/$surveyId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
-  SurveysRoute: typeof SurveysRoute
+  SurveysSurveyIdRoute: typeof SurveysSurveyIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/surveys': {
-      id: '/surveys'
-      path: '/surveys'
-      fullPath: '/surveys'
-      preLoaderRoute: typeof SurveysRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -99,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/surveys/$surveyId': {
+      id: '/surveys/$surveyId'
+      path: '/surveys/$surveyId'
+      fullPath: '/surveys/$surveyId'
+      preLoaderRoute: typeof SurveysSurveyIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -106,7 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
-  SurveysRoute: SurveysRoute,
+  SurveysSurveyIdRoute: SurveysSurveyIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
