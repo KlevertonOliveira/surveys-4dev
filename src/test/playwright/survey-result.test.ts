@@ -95,4 +95,21 @@ test.describe("SurveyResultPage", () => {
     await expect(secondAnswer.getByTestId("percent")).toHaveText("48%");
     await expect(secondAnswer.getByTestId("image")).not.toBeVisible();
   });
+
+  test("Should return to survey list page on 'Back' button click", async ({ page, baseURL }) => {
+    await HTTP.mockSuccessfulRequest({
+      page,
+      url: apiURL,
+      response: surveyResult,
+    });
+
+    await page.goto(getPageURL(baseURL!), { waitUntil: "load" });
+
+    const returnButton = page.getByTestId("return-button");
+    await expect(returnButton).toBeVisible();
+    await returnButton.click();
+
+    await page.waitForURL("**/");
+    expect(page.url()).toEqual(`${baseURL}/`);
+  });
 });
