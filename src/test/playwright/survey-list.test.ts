@@ -106,17 +106,17 @@ test.describe("SurveyListPage", () => {
     await expect(surveyItems).toHaveCount(2);
 
     const firstItem = surveyItems.first();
-    expect(firstItem.getByTestId("check-icon")).toBeVisible();
-    expect(firstItem.getByTestId("question")).toHaveText("Question 1");
-    expect(firstItem.getByTestId("day")).toHaveText("16");
-    expect(firstItem.getByTestId("month")).toHaveText("May");
-    expect(firstItem.getByTestId("year")).toHaveText("2026");
+    await expect(firstItem.getByTestId("check-icon")).toBeVisible();
+    await expect(firstItem.getByTestId("question")).toHaveText("Question 1");
+    await expect(firstItem.getByTestId("day")).toHaveText("16");
+    await expect(firstItem.getByTestId("month")).toHaveText("May");
+    await expect(firstItem.getByTestId("year")).toHaveText("2026");
 
     const secondItem = surveyItems.nth(1);
-    expect(secondItem.getByTestId("question-mark-icon")).toBeVisible();
-    expect(secondItem.getByTestId("question")).toHaveText("Question 2");
-    expect(secondItem.getByTestId("day")).toHaveText("15");
-    expect(secondItem.getByTestId("month")).toHaveText("Mar");
-    expect(secondItem.getByTestId("year")).toHaveText("2024");
+    await expect(secondItem.getByTestId("question-mark-icon")).toBeVisible();
+    await expect(secondItem.getByTestId("question")).toHaveText("Question 2");
+    await expect(secondItem.getByTestId("day")).toHaveText("15");
+    await expect(secondItem.getByTestId("month")).toHaveText("Mar");
+    await expect(secondItem.getByTestId("year")).toHaveText("2024");
   });
 });

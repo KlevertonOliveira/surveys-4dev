@@ -8,13 +8,12 @@
       "answer": "Lorem ipsum 0001",
       "count": 30,
       "percent": 52,
-      "image": ""
+      "image": "any_image_1"
     },
     {
       "answer": "Lorem ipsum 0002",
       "count": 30,
-      "percent": 48,
-      "image": ""
+      "percent": 48
     }
   ]
 }

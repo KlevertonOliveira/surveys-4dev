@@ -65,4 +65,34 @@ test.describe("SurveyResultPage", () => {
 
     await expect(page.getByTestId("survey-result-skeleton")).toBeVisible();
   });
+
+  test("Should present survey result when fetch is successful", async ({ page, baseURL }) => {
+    await HTTP.mockSuccessfulRequest({
+      page,
+      url: apiURL,
+      response: surveyResult,
+    });
+
+    await page.goto(getPageURL(baseURL!), { waitUntil: "load" });
+
+    await expect(page.getByTestId("survey-result")).toBeVisible();
+
+    expect(page.getByTestId("question")).toHaveText("Question 1");
+    expect(page.getByTestId("day")).toHaveText("16");
+    expect(page.getByTestId("month")).toHaveText("May");
+    expect(page.getByTestId("year")).toHaveText("2026");
+
+    const answers = page.getByTestId("survey-result-answer");
+    await expect(answers).toHaveCount(2);
+
+    const firstAnswer = answers.first();
+    await expect(firstAnswer.getByTestId("description")).toHaveText("Lorem ipsum 0001");
+    await expect(firstAnswer.getByTestId("percent")).toHaveText("52%");
+    await expect(firstAnswer.getByTestId("image")).toHaveAttribute("src", "any_image_1");
+
+    const secondAnswer = answers.nth(1);
+    await expect(secondAnswer.getByTestId("description")).toHaveText("Lorem ipsum 0002");
+    await expect(secondAnswer.getByTestId("percent")).toHaveText("48%");
+    await expect(secondAnswer.getByTestId("image")).not.toBeVisible();
+  });
 });
