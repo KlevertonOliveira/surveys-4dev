@@ -1,13 +1,39 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { mockSurveyModel } from "@/domain/test/mock-survey-list";
 import SurveyItem from "./survey-item";
+import { RouterProvider } from "@tanstack/react-router";
+import { routeAuth } from "@/utils/route-auth";
+import { mockAccountModel } from "@/domain/test";
+import { generateTestRouter } from "@/utils/test";
+import userEvent from "@testing-library/user-event";
 
-const makeSut = (survey = mockSurveyModel()): void => {
-  render(<SurveyItem survey={survey} />);
+type SutTypes = {
+  router: ReturnType<typeof generateTestRouter>;
+};
+
+const makeSut = (survey = mockSurveyModel()): SutTypes => {
+  const router = generateTestRouter({
+    initialLocation: '/',
+    rootRoutecomponent: (
+      <SurveyItem survey={survey} />
+    ),
+    context: {
+      routeAuth: {
+        ...routeAuth,
+        getAccount: vi.fn().mockReturnValue(mockAccountModel()),
+      },
+    }
+  });
+
+  render(
+    <RouterProvider router={router} />
+  );
+
+  return { router };
 };
 
 describe("SurveyItem Component", () => {
-  test("Should render with correct values (survey not answered)", () => {
+  test("Should render with correct values (survey not answered)", async () => {
     const survey = {
       ...mockSurveyModel(),
       didAnswer: false,
@@ -16,6 +42,8 @@ describe("SurveyItem Component", () => {
 
     makeSut(survey);
 
+    await waitFor(() => screen.getByTestId("survey-item"));
+
     expect(screen.getByTestId("question-mark-icon")).toBeInTheDocument();
     expect(screen.getByTestId("question")).toHaveTextContent(survey.question);
     expect(screen.getByTestId("day")).toHaveTextContent("15");
@@ -23,7 +51,7 @@ describe("SurveyItem Component", () => {
     expect(screen.getByTestId("year")).toHaveTextContent("2026");
   });
 
-  test("Should render with correct values (survey answered)", () => {
+  test("Should render with correct values (survey answered)", async () => {
     const survey = {
       ...mockSurveyModel(),
       didAnswer: true,
@@ -32,10 +60,24 @@ describe("SurveyItem Component", () => {
 
     makeSut(survey);
 
+    await waitFor(() => screen.getByTestId("survey-item"));
+
     expect(screen.getByTestId("check-icon")).toBeInTheDocument();
     expect(screen.getByTestId("question")).toHaveTextContent(survey.question);
     expect(screen.getByTestId("day")).toHaveTextContent("10");
     expect(screen.getByTestId("month")).toHaveTextContent("Feb");
     expect(screen.getByTestId("year")).toHaveTextContent("2025");
+  });
+
+  test("Should go to SurveyResult upon 'See Results' link interaction", async () => {
+    const survey = mockSurveyModel();
+    const { router } = makeSut(survey);
+
+    await waitFor(() => screen.getByTestId("survey-item"));
+
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId("go-to-result-link"));
+
+    expect(router.state.location.pathname).toEqual(`/surveys/${survey.id}`);
   });
 });
