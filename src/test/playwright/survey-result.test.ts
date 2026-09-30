@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { mockAccountModel } from "@/domain/test";
 import { test, expect } from "@playwright/test";
 import * as HTTP from "@/test/api-mocks/api-mocks";
@@ -51,5 +51,18 @@ test.describe("SurveyResultPage", () => {
 
     await page.waitForURL("**/login");
     expect(page.url()).toEqual(`${baseURL}/login`);
+  });
+
+  test("Should present survey result skeleton when fetching data", async ({ page, baseURL }) => {
+    await HTTP.mockSuccessfulRequest({
+      page,
+      url: apiURL,
+      response: surveyResult,
+      callback: async () => await new Promise(() => { })
+    });
+
+    await page.goto(getPageURL(baseURL!), { waitUntil: "load" });
+
+    await expect(page.getByTestId("survey-result-skeleton")).toBeVisible();
   });
 });
