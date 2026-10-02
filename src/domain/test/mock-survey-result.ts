@@ -6,18 +6,19 @@ export const mockSurveyResult = (): SurveyResultModel => {
     surveyId: faker.string.uuid(),
     question: faker.word.words(5),
     date: faker.date.recent(),
-    isCurrentAccountAnswer: faker.datatype.boolean(),
     answers: [
       {
         answer: faker.lorem.words(8),
         count: faker.number.int(),
         percent: faker.number.int({ max: 100 }),
-        image: faker.internet.url()
+        image: faker.internet.url(),
+        isCurrentAccountAnswer: true,
       },
       {
         answer: faker.lorem.words(8),
         count: faker.number.int(),
         percent: faker.number.int({ max: 100 }),
+        isCurrentAccountAnswer: false,
       }
     ]
   };

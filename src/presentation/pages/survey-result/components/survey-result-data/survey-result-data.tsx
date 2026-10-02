@@ -3,6 +3,7 @@ import { Calendar } from "@/presentation/components";
 import { SurveyResultAnswer } from "@/presentation/pages/survey-result/components";
 import { useNavigate } from "@tanstack/react-router";
 import FlipMove from "react-flip-move";
+import { Fragment } from "react/jsx-runtime";
 
 type Props = {
   surveyResult: SurveyResultModel;
@@ -32,12 +33,9 @@ export default function SurveyResultData({ surveyResult }: Props) {
         className="flex flex-col gap-4"
       >
         {surveyResult.answers.map(answer => (
-          <div key={answer.answer}>
-            <SurveyResultAnswer
-              answer={answer}
-              isCurrentAccountAnswer={surveyResult.isCurrentAccountAnswer}
-            />
-          </div>
+          <Fragment key={answer.answer}>
+            <SurveyResultAnswer answer={answer} />
+          </Fragment>
         ))}
       </FlipMove>
 

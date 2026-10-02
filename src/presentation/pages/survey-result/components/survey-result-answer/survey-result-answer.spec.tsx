@@ -5,7 +5,7 @@ import { mockSurveyResult } from "@/domain/test";
 describe('SurveyResultAnswer', () => {
   test('should correctly display all values (with image)', () => {
     const firstAnswer = mockSurveyResult().answers[0];
-    render(<SurveyResultAnswer answer={firstAnswer} isCurrentAccountAnswer={true} />);
+    render(<SurveyResultAnswer answer={firstAnswer} />);
 
     expect(screen.getByTestId("survey-result-answer")).toHaveAttribute("data-active", "true");
     expect(screen.getByTestId("image")).toHaveAttribute("src", firstAnswer.image);
@@ -16,7 +16,7 @@ describe('SurveyResultAnswer', () => {
 
   test('should correctly display all values (without image)', () => {
     const secondAnswer = mockSurveyResult().answers[1];
-    render(<SurveyResultAnswer answer={secondAnswer} isCurrentAccountAnswer={false} />);
+    render(<SurveyResultAnswer answer={secondAnswer} />);
 
     expect(screen.getByTestId("survey-result-answer")).toHaveAttribute("data-active", "false");
     expect(screen.queryByTestId("image")).not.toBeInTheDocument();
