@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "concurrently \"npm run server\" \"npm run dev\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
@@ -16,7 +17,8 @@
     "lint-staged": "lint-staged",
     "check": "npm-check -u -s",
     "test:playwright": "npx playwright test",
-    "play:ui": "npx playwright test --ui"
+    "play:ui": "npx playwright test --ui",
+    "server": "node server.js"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

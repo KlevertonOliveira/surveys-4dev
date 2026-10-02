@@ -1,0 +1,74 @@
+{
+  "auth": {
+    "accessToken": "2a7a7369-da4e-4524-a677-c1553f0bc243",
+    "name": "User"
+  },
+  "surveys": [
+    {
+      "id": "1",
+      "question": "What's your current level as a developer/engineer?",
+      "didAnswer": true,
+      "date": "2026-10-02T00:00:00",
+      "answers": []
+    },
+    {
+      "id": "2",
+      "question": "What's your favorite frontend web framework?",
+      "didAnswer": false,
+      "date": "2026-09-28T00:00:00",
+      "answers": []
+    }
+  ],
+  "surveyResults": [
+    {
+      "surveyId": "1",
+      "question": "What's your current level as a developer/engineer?",
+      "date": "2026-10-02T00:00:00",
+      "answers": [
+        {
+          "answer": "Junior",
+          "count": 30,
+          "percent": 47,
+          "isCurrentAccountAnswer": false
+        },
+        {
+          "answer": "Mid-Level",
+          "count": 30,
+          "percent": 34,
+          "isCurrentAccountAnswer": true
+        },
+        {
+          "answer": "Senior",
+          "count": 30,
+          "percent": 19,
+          "isCurrentAccountAnswer": false
+        }
+      ]
+    },
+    {
+      "surveyId": "2",
+      "question": "What's your favorite frontend web framework?",
+      "date": "2026-09-28T00:00:00",
+      "answers": [
+        {
+          "answer": "React",
+          "count": 30,
+          "percent": 59,
+          "isCurrentAccountAnswer": true
+        },
+        {
+          "answer": "Vue",
+          "count": 30,
+          "percent": 28,
+          "isCurrentAccountAnswer": false
+        },
+        {
+          "answer": "Angular",
+          "count": 30,
+          "percent": 13,
+          "isCurrentAccountAnswer": false
+        }
+      ]
+    }
+  ]
+}
