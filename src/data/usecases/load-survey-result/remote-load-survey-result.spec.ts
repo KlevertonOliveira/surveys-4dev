@@ -41,7 +41,7 @@ describe('RemoteLoadSurveyResult', () => {
     };
 
     const promise = sut.load();
-    expect(promise).rejects.toThrow(new AccessDeniedError());
+    await expect(promise).rejects.toThrow(new AccessDeniedError());
   });
 
   test("Should throw UnexpectedError if HttpGetClient returns 404", async () => {
@@ -51,7 +51,7 @@ describe('RemoteLoadSurveyResult', () => {
     };
 
     const promise = sut.load();
-    expect(promise).rejects.toThrow(new UnexpectedError());
+    await expect(promise).rejects.toThrow(new UnexpectedError());
   });
 
   test("Should return a SurveyResultModel if HttpGetClient returns 200", async () => {
