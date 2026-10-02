@@ -16,8 +16,7 @@
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "check": "npm-check -u -s",
-    "test:playwright": "npx playwright test",
-    "play:ui": "npx playwright test --ui",
+    "test:play": "npx playwright test",
     "server": "node server.js"
   },
   "dependencies": {
