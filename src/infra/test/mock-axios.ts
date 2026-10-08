@@ -9,9 +9,6 @@ export const mockHttpResponse = (): unknown => ({
 
 export const mockAxios = (): MockedFunction<AxiosStatic> => {
   const mockedAxios = vi.mocked(axios);
-
-  mockedAxios.post.mockClear().mockResolvedValue(mockHttpResponse);
-  mockedAxios.get.mockClear().mockResolvedValue(mockHttpResponse);
-
+  mockedAxios.request.mockClear().mockResolvedValue(mockHttpResponse);
   return mockedAxios;
 };
