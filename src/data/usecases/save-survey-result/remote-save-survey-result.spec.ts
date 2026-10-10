@@ -1,17 +1,19 @@
 import { HttpClientSpy } from "@/data/test";
 import { faker } from "@faker-js/faker";
 import { RemoteSaveSurveyResult } from "./remote-save-survey-result";
-import { mockSaveSurveyResultParams } from "@/domain/test";
+import { mockSaveSurveyResultParams, mockSurveyResult } from "@/domain/test";
 import { HttpStatusCode } from "@/data/protocols/http";
 import { AccessDeniedError, UnexpectedError } from "@/domain/errors";
+import type { SaveSurveyResultParams } from "@/domain/usecases";
+import type { SurveyResultModel } from "@/domain/models";
 
 type SutTypes = {
   sut: RemoteSaveSurveyResult;
-  httpClientSpy: HttpClientSpy<unknown, unknown>;
+  httpClientSpy: HttpClientSpy<SaveSurveyResultParams, SurveyResultModel>;
 };
 
 const makeSut = (url = faker.internet.url()): SutTypes => {
-  const httpClientSpy = new HttpClientSpy();
+  const httpClientSpy = new HttpClientSpy<SaveSurveyResultParams, SurveyResultModel>();
   const sut = new RemoteSaveSurveyResult(url, httpClientSpy);
 
   return {
@@ -24,6 +26,11 @@ describe("RemoteSaveSurveyResult", () => {
   test("Should call HttpClient with correct values", async () => {
     const url = faker.internet.url();
     const { sut, httpClientSpy } = makeSut(url);
+
+    httpClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: mockSurveyResult(),
+    };
 
     const params = mockSaveSurveyResultParams();
 
@@ -62,5 +69,22 @@ describe("RemoteSaveSurveyResult", () => {
 
     const httpResponsePromise = sut.save(mockSaveSurveyResultParams());
     await expect(httpResponsePromise).rejects.toThrow(new UnexpectedError());
+  });
+
+  test("Should return a SurveyResult if HttpClient returns 200", async () => {
+    const { sut, httpClientSpy } = makeSut();
+
+    const surveyResult = mockSurveyResult();
+
+    httpClientSpy.response = {
+      statusCode: HttpStatusCode.ok,
+      body: surveyResult,
+    };
+
+    const httpResponseBody = await sut.save(mockSaveSurveyResultParams());
+    expect(httpResponseBody).toEqual({
+      ...surveyResult,
+      date: new Date(surveyResult.date)
+    });
   });
 });
