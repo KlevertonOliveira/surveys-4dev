@@ -13,7 +13,7 @@ app.use(express.json());
 /**
  * POST /login
  */
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
   const auth = router.db.get('auth').value();
 
   res.json(auth);
@@ -22,7 +22,7 @@ app.post('/login', (req, res) => {
 /**
  * POST /signup
  */
-app.post('/signup', (req, res) => {
+app.post('/api/signup', (req, res) => {
   const auth = router.db.get('auth').value();
 
   res.json(auth);
@@ -31,7 +31,7 @@ app.post('/signup', (req, res) => {
 /**
  * GET /surveys/:id/results
  */
-app.get('/surveys/:id/results', (req, res) => {
+app.get('/api/surveys/:id/results', (req, res) => {
   const { id } = req.params;
 
   const result = router.db
@@ -51,7 +51,7 @@ app.get('/surveys/:id/results', (req, res) => {
 /**
  * JSON Server routes
  */
-app.use(router);
+app.use('/api', router);
 
 /**
  * Start server
