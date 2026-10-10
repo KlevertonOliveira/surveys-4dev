@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import type { SurveyResultModel } from "@/domain/models";
+import type { SaveSurveyResultParams } from "@/domain/usecases";
 
 export const mockSurveyResult = (): SurveyResultModel => {
   return {
@@ -23,3 +24,7 @@ export const mockSurveyResult = (): SurveyResultModel => {
     ]
   };
 };
+
+export const mockSaveSurveyResultParams = (): SaveSurveyResultParams => ({
+  answer: faker.string.alphanumeric()
+});
