@@ -1,9 +1,9 @@
 import type { SurveyResultModel } from "@/domain/models";
 
-type Params = {
+export type SaveSurveyResultParams = {
   answer: string;
 };
 
 export interface SaveSurveyResult {
-  save: (params: Params) => Promise<SurveyResultModel>;
+  save: (params: SaveSurveyResultParams) => Promise<SurveyResultModel>;
 }
