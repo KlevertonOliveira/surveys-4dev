@@ -1,5 +1,5 @@
 import { HttpStatusCode, type HttpClient } from "@/data/protocols/http";
-import { AccessDeniedError } from "@/domain/errors";
+import { AccessDeniedError, UnexpectedError } from "@/domain/errors";
 import type { SaveSurveyResultParams } from "@/domain/usecases";
 
 export class RemoteSaveSurveyResult {
@@ -16,8 +16,9 @@ export class RemoteSaveSurveyResult {
     });
 
     switch (httpResponse.statusCode) {
+      case HttpStatusCode.ok: break;
       case HttpStatusCode.forbidden: throw new AccessDeniedError();
-      default: break;
+      default: throw new UnexpectedError();
     }
   };
 }
