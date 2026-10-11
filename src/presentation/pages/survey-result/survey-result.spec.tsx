@@ -124,4 +124,17 @@ describe('SurveyResult Component', () => {
     // Thus, as the retry button calls "load" (now without mocked errors), the callsCount should be 1
     expect(loadSurveyResultSpy.callsCount).toBe(1);
   });
+
+  test("Should not present LoadingScreen component on active answer click", async () => {
+    makeSut();
+
+    await screen.findByTestId("survey-result");
+
+    const answers = screen.getAllByTestId("survey-result-answer");
+
+    const user = userEvent.setup();
+    await user.click(answers[0]);
+
+    expect(screen.queryByTestId("loading-screen")).not.toBeInTheDocument();
+  });
 });
