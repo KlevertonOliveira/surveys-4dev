@@ -1,16 +1,25 @@
 import type { SurveyResultAnswer } from "@/domain/models";
 import type { JSX } from "react/jsx-runtime";
+import { useSurveyResultContext } from "../../hooks/use-survey-result-context";
 
 type Props = {
   answer: SurveyResultAnswer;
 };
 
 export default function SurveyResultAnswer({ answer }: Props): JSX.Element {
+  const { onAnswer } = useSurveyResultContext();
+
+  const answerClick = (): void => {
+    if (answer.isCurrentAccountAnswer) return;
+    onAnswer(answer.answer);
+  };
+
   return (
-    <li
+    <button
+      onClick={answerClick}
       data-active={answer.isCurrentAccountAnswer}
       data-testid="survey-result-answer"
-      className={`flex justify-between bg-white items-center p-4 rounded-lg text-primaryDark 
+      className={`flex justify-between bg-white items-center p-4 rounded-lg text-primaryDark
       ${answer.isCurrentAccountAnswer ? "border-2 border-primaryLight" : ""}`}
     >
       {answer.image && (
@@ -23,7 +32,7 @@ export default function SurveyResultAnswer({ answer }: Props): JSX.Element {
       )}
 
       <span
-        className="grow my-0 mr-4 text-xl"
+        className="grow my-0 mr-4 text-xl text-left"
         data-testid="description"
       >
         {answer.answer}
@@ -35,6 +44,6 @@ export default function SurveyResultAnswer({ answer }: Props): JSX.Element {
       >
         {answer.percent}%
       </span>
-    </li>
+    </button>
   );
 }

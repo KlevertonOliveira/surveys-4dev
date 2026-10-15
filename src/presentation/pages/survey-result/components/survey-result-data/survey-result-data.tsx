@@ -26,14 +26,14 @@ export default function SurveyResultData({ surveyResult }: Props) {
         </h2>
       </hgroup>
 
-      <ul
+      <div
         data-testid="answers"
         className="flex flex-col gap-4"
       >
         {surveyResult.answers.map(answer => (
           <SurveyResultAnswer key={answer.answer} answer={answer} />
         ))}
-      </ul>
+      </div>
 
       <button
         className="mt-6"
