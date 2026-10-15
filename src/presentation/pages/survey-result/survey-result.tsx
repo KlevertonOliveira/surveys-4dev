@@ -29,6 +29,8 @@ export default function SurveyResultPage({
   const {
     mutate: saveResult,
     isPending: isSavingResult,
+    isError: isSaveError,
+    error: saveError
   } = useMutation({
     mutationFn: async ({ answer }: { answer: string; }) => {
       return await saveSurveyResult.save({ answer });
@@ -49,6 +51,13 @@ export default function SurveyResultPage({
         {!isLoading && isError && (
           <Error
             error={error}
+            onRetry={() => refetch()}
+          />
+        )}
+
+        {isSaveError && (
+          <Error
+            error={saveError}
             onRetry={() => refetch()}
           />
         )}
