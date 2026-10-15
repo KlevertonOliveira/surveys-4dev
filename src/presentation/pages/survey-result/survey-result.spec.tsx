@@ -105,7 +105,7 @@ describe('SurveyResult Component', () => {
     expect(router.state.location.pathname).toBe("/");
   });
 
-  test("Should render error on UnexpectedError", async () => {
+  test("Should render error when LoadSurveyResult throws UnexpectedError", async () => {
     const loadSurveyResultSpy = new LoadSurveyResultSpy();
     const error = new UnexpectedError();
 
@@ -167,5 +167,28 @@ describe('SurveyResult Component', () => {
 
     expect(saveSurveyResultSpy.params.answer)
       .toBe(loadSurveyResultSpy.surveyResult.answers[1].answer);
+  });
+
+  test("Should render error when SaveSurveyResult throws UnexpectedError", async () => {
+    const saveSurveyResultSpy = new SaveSurveyResultSpy();
+    const error = new UnexpectedError();
+
+    vi.spyOn(saveSurveyResultSpy, "save").mockRejectedValueOnce(error);
+
+    makeSut({ saveSurveyResultSpy });
+
+    await screen.findByTestId("survey-result");
+
+    const answers = (screen.queryAllByTestId("survey-result-answer"));
+    const firstNonActiveAnswer = answers[1];
+
+    const user = userEvent.setup();
+    await user.click(firstNonActiveAnswer);
+
+    const errorMessage = await screen.findByTestId("error-message");
+
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent(error.message);
+    expect(screen.queryByTestId("loading-screen")).not.toBeInTheDocument();
   });
 });
