@@ -1,11 +1,23 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+
 import { render, screen } from "@testing-library/react";
 import SurveyResultAnswer from "./survey-result-answer";
 import { mockSurveyResult } from "@/domain/test";
+import { SurveyResultContext } from "../../contexts/survey-result-context";
+import type { SurveyResultAnswer as SurveyResultAnswerType } from "@/domain/models";
+
+const makeSut = (answer: SurveyResultAnswerType) => {
+  render(
+    <SurveyResultContext value={{ onAnswer: () => { } }}>
+      <SurveyResultAnswer answer={answer} />
+    </SurveyResultContext>
+  );
+};
 
 describe('SurveyResultAnswer', () => {
   test('should correctly display all values (with image)', () => {
     const firstAnswer = mockSurveyResult().answers[0];
-    render(<SurveyResultAnswer answer={firstAnswer} />);
+    makeSut(firstAnswer);
 
     expect(screen.getByTestId("survey-result-answer")).toHaveAttribute("data-active", "true");
     expect(screen.getByTestId("image")).toHaveAttribute("src", firstAnswer.image);
@@ -16,7 +28,7 @@ describe('SurveyResultAnswer', () => {
 
   test('should correctly display all values (without image)', () => {
     const secondAnswer = mockSurveyResult().answers[1];
-    render(<SurveyResultAnswer answer={secondAnswer} />);
+    makeSut(secondAnswer);
 
     expect(screen.getByTestId("survey-result-answer")).toHaveAttribute("data-active", "false");
     expect(screen.queryByTestId("image")).not.toBeInTheDocument();

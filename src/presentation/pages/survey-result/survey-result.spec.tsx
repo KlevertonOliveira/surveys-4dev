@@ -2,6 +2,7 @@ import { UnexpectedError } from "@/domain/errors";
 import { mockAccountModel, mockSurveyResult } from "@/domain/test";
 import { SurveyResultPage } from "@/presentation/pages";
 import { LoadSurveyResultSpy } from "@/presentation/test";
+import { SaveSurveyResultSpy } from "@/presentation/test/mock-save-survey-result";
 import { routeAuth } from "@/utils/route-auth";
 import { generateTestRouter, TestQueryClientProvider } from "@/utils/test";
 import { RouterProvider } from "@tanstack/react-router";
@@ -11,13 +12,25 @@ import userEvent from "@testing-library/user-event";
 type SutTypes = {
   router: ReturnType<typeof generateTestRouter>;
   loadSurveyResultSpy: LoadSurveyResultSpy;
+  saveSurveyResultSpy: SaveSurveyResultSpy;
 };
 
-const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
+type SutParams = {
+  loadSurveyResultSpy?: LoadSurveyResultSpy;
+  saveSurveyResultSpy?: SaveSurveyResultSpy;
+};
+
+const makeSut = ({
+  loadSurveyResultSpy = new LoadSurveyResultSpy(),
+  saveSurveyResultSpy = new SaveSurveyResultSpy()
+}: SutParams = {} as SutParams): SutTypes => {
   const router = generateTestRouter({
     initialLocation: '/surveys',
     rootRoutecomponent: (
-      <SurveyResultPage loadSurveyResult={loadSurveyResultSpy} />
+      <SurveyResultPage
+        loadSurveyResult={loadSurveyResultSpy}
+        saveSurveyResult={saveSurveyResultSpy}
+      />
     ),
     context: {
       routeAuth: {
@@ -35,7 +48,8 @@ const makeSut = (loadSurveyResultSpy = new LoadSurveyResultSpy()): SutTypes => {
 
   return {
     router,
-    loadSurveyResultSpy
+    loadSurveyResultSpy,
+    saveSurveyResultSpy,
   };
 };
 
@@ -63,7 +77,7 @@ describe('SurveyResult Component', () => {
     const loadSurveyResultSpy = new LoadSurveyResultSpy();
     loadSurveyResultSpy.surveyResult = surveyResult;
 
-    makeSut(loadSurveyResultSpy);
+    makeSut({ loadSurveyResultSpy });
 
     await screen.findByTestId("survey-result");
 
@@ -80,7 +94,7 @@ describe('SurveyResult Component', () => {
     const loadSurveyResultSpy = new LoadSurveyResultSpy();
     loadSurveyResultSpy.surveyResult = mockSurveyResult();
 
-    const { router } = makeSut(loadSurveyResultSpy);
+    const { router } = makeSut({ loadSurveyResultSpy });
 
     await screen.findByTestId("survey-result");
     const returnButton = screen.getByTestId("return-button");
@@ -96,7 +110,7 @@ describe('SurveyResult Component', () => {
     const error = new UnexpectedError();
 
     vi.spyOn(loadSurveyResultSpy, "load").mockRejectedValueOnce(error);
-    makeSut(loadSurveyResultSpy);
+    makeSut({ loadSurveyResultSpy });
 
     const errorMessage = await screen.findByTestId("error-message");
 
@@ -111,7 +125,7 @@ describe('SurveyResult Component', () => {
     const error = new UnexpectedError();
 
     vi.spyOn(loadSurveyResultSpy, "load").mockRejectedValueOnce(error);
-    makeSut(loadSurveyResultSpy);
+    makeSut({ loadSurveyResultSpy });
 
     expect(await screen.findByTestId("error-message")).toBeInTheDocument();
 
@@ -136,5 +150,22 @@ describe('SurveyResult Component', () => {
     await user.click(answers[0]);
 
     expect(screen.queryByTestId("loading-screen")).not.toBeInTheDocument();
+  });
+
+  test("Should call SaveSurveyResult on non-active answer click", async () => {
+    const { saveSurveyResultSpy, loadSurveyResultSpy } = makeSut();
+
+    await screen.findByTestId("survey-result");
+
+    const answers = (screen.queryAllByTestId("survey-result-answer"));
+    const firstNonActiveAnswer = answers[1];
+
+    const user = userEvent.setup();
+    await user.click(firstNonActiveAnswer);
+
+    expect(screen.queryByTestId("loading-screen")).toBeInTheDocument();
+
+    expect(saveSurveyResultSpy.params.answer)
+      .toBe(loadSurveyResultSpy.surveyResult.answers[1].answer);
   });
 });
