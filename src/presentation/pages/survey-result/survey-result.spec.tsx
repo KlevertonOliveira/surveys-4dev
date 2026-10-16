@@ -6,7 +6,7 @@ import { SaveSurveyResultSpy } from "@/presentation/test/mock-save-survey-result
 import { routeAuth } from "@/utils/route-auth";
 import { generateTestRouter, TestQueryClientProvider } from "@/utils/test";
 import { RouterProvider } from "@tanstack/react-router";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 type SutTypes = {
@@ -190,5 +190,51 @@ describe('SurveyResult Component', () => {
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent(error.message);
     expect(screen.queryByTestId("loading-screen")).not.toBeInTheDocument();
+  });
+
+  test("Should present updated SurveyResult data on SaveSurveyResult success and refetch", async () => {
+    const initialSurveyResultData = {
+      ...mockSurveyResult(),
+      date: new Date("2020-01-16T00:00:00")
+    };
+
+    const updatedSurveyResultData = {
+      ...mockSurveyResult(),
+      date: new Date("2020-03-25T00:00:00")
+    };
+
+    const saveSurveyResultSpy = new SaveSurveyResultSpy();
+    const loadSurveyResultSpy = new LoadSurveyResultSpy();
+
+    loadSurveyResultSpy.surveyResult = initialSurveyResultData;
+    saveSurveyResultSpy.surveyResult = updatedSurveyResultData;
+
+    makeSut({ saveSurveyResultSpy, loadSurveyResultSpy });
+
+    await screen.findByTestId("survey-result");
+
+    expect(loadSurveyResultSpy.callsCount).toBe(1);
+
+    expect(screen.getByTestId("day")).toHaveTextContent("16");
+    expect(screen.getByTestId("month")).toHaveTextContent("Jan");
+    expect(screen.getByTestId("year")).toHaveTextContent("2020");
+
+    const answers = screen.queryAllByTestId("survey-result-answer");
+    const firstNonActiveAnswer = answers[1];
+
+    loadSurveyResultSpy.surveyResult = updatedSurveyResultData;
+
+    const user = userEvent.setup();
+    await user.click(firstNonActiveAnswer);
+
+    await waitFor(() => {
+      expect(loadSurveyResultSpy.callsCount).toBe(2);
+    });
+
+    await screen.findByTestId("survey-result");
+
+    expect(screen.getByTestId("day")).toHaveTextContent("25");
+    expect(screen.getByTestId("month")).toHaveTextContent("Mar");
+    expect(screen.getByTestId("year")).toHaveTextContent("2020");
   });
 });
