@@ -35,6 +35,7 @@ export default function SurveyResultPage({
     mutationFn: async ({ answer }: { answer: string; }) => {
       return await saveSurveyResult.save({ answer });
     },
+    onSuccess: () => refetch()
   });
 
   return (
