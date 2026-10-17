@@ -17,9 +17,9 @@ export default function SurveyResultPage({
 }: Props): JSX.Element {
   const {
     data: surveyResult,
-    isLoading,
-    isError,
-    error,
+    isFetching: isFetchingResult,
+    isError: isFetchError,
+    error: fetchError,
     refetch
   } = useQuery({
     queryKey: ["load-survey-result"],
@@ -30,7 +30,8 @@ export default function SurveyResultPage({
     mutate: saveResult,
     isPending: isSavingResult,
     isError: isSaveError,
-    error: saveError
+    error: saveError,
+    reset: resetSaveStatus,
   } = useMutation({
     mutationFn: async ({ answer }: { answer: string; }) => {
       return await saveSurveyResult.save({ answer });
@@ -38,33 +39,64 @@ export default function SurveyResultPage({
     onSuccess: () => refetch()
   });
 
+  if (isFetchingResult) {
+    return (
+      <SurveyResultWrapper>
+        <SurveyResultSkeleton />
+      </SurveyResultWrapper>
+    );
+  }
+
+  if (isFetchError) {
+    return (
+      <SurveyResultWrapper>
+        <Error
+          error={fetchError}
+          onRetry={() => refetch()}
+        />
+      </SurveyResultWrapper>
+    );
+  }
+
+  if (isSavingResult) {
+    return (
+      <SurveyResultWrapper>
+        <LoadingScreen />
+      </SurveyResultWrapper>
+    );
+  }
+
+  if (isSaveError) {
+    return (
+      <SurveyResultWrapper>
+        <Error
+          error={saveError}
+          onRetry={() => {
+            resetSaveStatus();
+            refetch();
+          }}
+        />
+      </SurveyResultWrapper>
+    );
+  }
+
+  return (
+    <SurveyResultWrapper>
+      <SurveyResultContext value={{ onAnswer: (answer) => saveResult({ answer }) }}>
+        <SurveyResultData surveyResult={surveyResult!} />
+      </SurveyResultContext>
+    </SurveyResultWrapper>
+  );
+}
+
+function SurveyResultWrapper({ children }: { children: JSX.Element; }): JSX.Element {
   return (
     <div className="flex flex-col min-h-screen h-full justify-between bg-background">
       <Header />
 
-      <SurveyResultContext value={{ onAnswer: (answer) => saveResult({ answer }) }}>
-        {isLoading && <SurveyResultSkeleton />}
-
-        {!isLoading && surveyResult && (
-          <SurveyResultData surveyResult={surveyResult} />
-        )}
-
-        {!isLoading && isError && (
-          <Error
-            error={error}
-            onRetry={() => refetch()}
-          />
-        )}
-
-        {isSaveError && (
-          <Error
-            error={saveError}
-            onRetry={() => refetch()}
-          />
-        )}
-
-        {isSavingResult && <LoadingScreen />}
-      </SurveyResultContext>
+      <div className="max-w-200 w-full mx-auto">
+        {children}
+      </div>
 
       <Footer />
     </div>
