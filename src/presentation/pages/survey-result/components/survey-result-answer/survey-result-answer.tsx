@@ -1,13 +1,14 @@
 import type { SurveyResultAnswer } from "@/domain/models";
+import { useContext } from "react";
 import type { JSX } from "react/jsx-runtime";
-import { useSurveyResultContext } from "../../hooks/use-survey-result-context";
+import { SurveyResultContext } from "@/presentation/pages/survey-result/contexts/survey-result-context";
 
 type Props = {
   answer: SurveyResultAnswer;
 };
 
 export default function SurveyResultAnswer({ answer }: Props): JSX.Element {
-  const { onAnswer } = useSurveyResultContext();
+  const { onAnswer } = useContext(SurveyResultContext)!;;
 
   const answerClick = (): void => {
     if (answer.isCurrentAccountAnswer) return;
