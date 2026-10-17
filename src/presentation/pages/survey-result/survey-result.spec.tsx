@@ -243,4 +243,20 @@ describe('SurveyResult Component', () => {
     expect(screen.getByTestId("month")).toHaveTextContent("Mar");
     expect(screen.getByTestId("year")).toHaveTextContent("2020");
   });
+
+  test("Should prevent multiple answer click", async () => {
+    const { saveSurveyResultSpy } = makeSut();
+
+    await screen.findByTestId("survey-result");
+
+    const answers = (screen.queryAllByTestId("survey-result-answer"));
+    const firstNonActiveAnswer = answers[1];
+
+    const user = userEvent.setup();
+    await user.click(firstNonActiveAnswer);
+    await user.click(firstNonActiveAnswer);
+    await user.click(firstNonActiveAnswer);
+
+    expect(saveSurveyResultSpy.callsCount).toBe(1);
+  });
 });
