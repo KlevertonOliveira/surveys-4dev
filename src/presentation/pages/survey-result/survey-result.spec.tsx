@@ -169,13 +169,13 @@ describe('SurveyResult Component', () => {
       .toBe(loadSurveyResultSpy.surveyResult.answers[1].answer);
   });
 
-  test("Should render error when SaveSurveyResult throws UnexpectedError", async () => {
+  test("Should render error when SaveSurveyResult throws UnexpectedError and refetch LoadSurveyResult on retry", async () => {
     const saveSurveyResultSpy = new SaveSurveyResultSpy();
     const error = new UnexpectedError();
 
     vi.spyOn(saveSurveyResultSpy, "save").mockRejectedValueOnce(error);
 
-    makeSut({ saveSurveyResultSpy });
+    const { loadSurveyResultSpy } = makeSut({ saveSurveyResultSpy });
 
     await screen.findByTestId("survey-result");
 
@@ -187,9 +187,15 @@ describe('SurveyResult Component', () => {
 
     const errorMessage = await screen.findByTestId("error-message");
 
+    expect(screen.queryByTestId("loading-screen")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("survey-result")).not.toBeInTheDocument();
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent(error.message);
-    expect(screen.queryByTestId("loading-screen")).not.toBeInTheDocument();
+
+    const retryButton = screen.getByTestId("retry-button");
+    await user.click(retryButton);
+
+    expect(loadSurveyResultSpy.callsCount).toBe(2);
   });
 
   test("Should present updated SurveyResult data on SaveSurveyResult success and refetch", async () => {
