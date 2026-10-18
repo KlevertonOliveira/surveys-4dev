@@ -149,6 +149,33 @@ test.describe("SurveyResultPage", () => {
       await expect(errorMessage).toHaveText("Something went wrong. Try again later.");
     });
 
+    test("Should refetch on retry button click", async ({ page }) => {
+      await expect(page.getByTestId("survey-result")).toBeVisible();
+
+      await HTTP.mockServerError(page, apiURL);
+
+      const firstNonActiveAnswer = page.getByTestId("survey-result-answer").nth(1);
+      await expect(firstNonActiveAnswer).toBeVisible();
+      await firstNonActiveAnswer.click();
+
+      const errorMessage = page.getByTestId("error-message");
+
+      await expect(errorMessage).toBeVisible();
+      await expect(errorMessage).toHaveText("Something went wrong. Try again later.");
+
+      await HTTP.mockSuccessfulRequest({
+        page,
+        url: apiURL,
+        response: surveyResult,
+      });
+
+      const retryButton = page.getByTestId("retry-button");
+      await expect(retryButton).toBeVisible();
+      await retryButton.click();
+
+      await expect(page.getByTestId("survey-result")).toBeVisible();
+    });
+
     test("Should logout on forbidden error (AccessDeniedError)", async ({ page, baseURL }) => {
       await expect(page.getByTestId("survey-result")).toBeVisible();
 
