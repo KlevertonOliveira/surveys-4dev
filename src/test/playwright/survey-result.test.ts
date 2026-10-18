@@ -179,5 +179,30 @@ test.describe("SurveyResultPage", () => {
 
       await expect(page.getByTestId("loading-screen")).toBeVisible();
     });
+
+    test("Should present correct result after save/refetch flow", async ({ page }) => {
+      await expect(page.getByTestId("survey-result")).toBeVisible();
+
+      const changedSurveyResult = {
+        ...surveyResult,
+        answers: surveyResult.answers.map((answer) => {
+          return {
+            ...answer,
+            isCurrentAccountAnswer: !answer.isCurrentAccountAnswer
+          };
+        })
+      };
+
+      await HTTP.mockSuccessfulRequest({
+        page,
+        url: apiURL,
+        response: changedSurveyResult,
+      });
+
+      await expect(page.getByTestId("survey-result-answer").nth(1)).toHaveAttribute("data-active", "false");
+      await page.getByTestId("survey-result-answer").nth(1).click();
+
+      await expect(page.getByTestId("survey-result-answer").nth(1)).toHaveAttribute("data-active", "true");
+    });
   });
 });
