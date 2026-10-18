@@ -162,5 +162,22 @@ test.describe("SurveyResultPage", () => {
       await page.waitForURL("**/login");
       expect(page.url()).toEqual(`${baseURL}/login`);
     });
+
+    test("Should present loading screen while saving result", async ({ page }) => {
+      await expect(page.getByTestId("survey-result")).toBeVisible();
+
+      await HTTP.mockSuccessfulRequest({
+        page,
+        url: apiURL,
+        response: surveyResult,
+        callback: async () => await new Promise(() => { })
+      });
+
+      const firstNonActiveAnswer = page.getByTestId("survey-result-answer").nth(1);
+      await expect(firstNonActiveAnswer).toBeVisible();
+      await firstNonActiveAnswer.click();
+
+      await expect(page.getByTestId("loading-screen")).toBeVisible();
+    });
   });
 });
