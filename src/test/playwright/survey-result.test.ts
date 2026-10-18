@@ -148,5 +148,19 @@ test.describe("SurveyResultPage", () => {
       await expect(errorMessage).toBeVisible();
       await expect(errorMessage).toHaveText("Something went wrong. Try again later.");
     });
+
+    test("Should logout on forbidden error (AccessDeniedError)", async ({ page, baseURL }) => {
+      await expect(page.getByTestId("survey-result")).toBeVisible();
+
+      await HTTP.mockForbiddenError(page, apiURL);
+
+      const firstNonActiveAnswer = page.getByTestId("survey-result-answer").nth(1);
+      await expect(firstNonActiveAnswer).toBeVisible();
+      await firstNonActiveAnswer.click();
+
+      await page.goto(getPageURL(baseURL!), { waitUntil: "load" });
+      await page.waitForURL("**/login");
+      expect(page.url()).toEqual(`${baseURL}/login`);
+    });
   });
 });
