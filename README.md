@@ -94,8 +94,11 @@ The goal of this project is to practice building a system in ReactJS using moder
 * Dummies
 
 ## Demo Images
+##### Login page
 ![alt text](/public/assets/image-1.png)
+##### Survey List
 ![alt text](/public/assets/image-2.png)
+##### Survey Results
 ![alt text](/public/assets/image-3.png)
 
 ## :file_folder: How to run the project
