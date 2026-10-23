@@ -94,9 +94,9 @@ The goal of this project is to practice building a system in ReactJS using moder
 * Dummies
 
 ## Demo Images
-![alt text](image-1.png)
-![alt text](image-2.png)
-![alt text](image-3.png)
+![alt text](/public/assets/image-1.png)
+![alt text](/public/assets/image-2.png)
+![alt text](/public/assets/image-3.png)
 
 ## :file_folder: How to run the project
 
