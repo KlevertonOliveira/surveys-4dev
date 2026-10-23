@@ -1,73 +1,130 @@
-# React + TypeScript + Vite
+# **4Dev React - Surveys For Developers **
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The goal of this project is to practice building a system in ReactJS using modern technologies integrated into a well-defined, decoupled architecture. It employs TDD (Test-Driven Development) as a working methodology and Clean Architecture to distribute responsibilities across layers, while consistently adhering to SOLID, DRY, YAGNI, and KISS principles, and applying design patterns to address common challenges.
+<br /><br />
 
-Currently, two official plugins are available:
+> ## Principles
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* Single Responsibility Principle (SRP)
+* Open Closed Principle (OCP)
+* Liskov Substitution Principle (LSP)
+* Interface Segregation Principle (ISP)
+* Dependency Inversion Principle (DIP)
+* Separation of Concerns (SOC)
+* Don't Repeat Yourself (DRY)
+* You Aren't Gonna Need It (YAGNI)
+* Keep It Simple, Silly (KISS)
+* Composition Over Inheritance
+* Small Commits
 
-## React Compiler
+> ## Design Patterns
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* Factory
+* Adapter
+* Composite
+* Decorator
+* Dependency Injection
+* Composition Root
+* Builder
+* Proxy
+* Compound Components
 
-## Expanding the ESLint configuration
+> ## Methodologies and Designs
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* TDD
+* Clean Architecture
+* DDD
+* Reactive Programming
+* Responsive Layout
+* Conventional Commits
+* GitFlow
+* Modular Design
+* Dependency Diagrams
+* Use Cases
+* Continuous Integration
+* Continuous Delivery
+* Continuous Deployment
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+> ## Frameworks, Libs and Tools
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* Typescript
+* React
+* Context API
+* Tanstack Query
+* Tanstack Router
+* Jest/Vitest
+* React Testing Library
+* Playwright
+* Axios
+* Git
+* Vite
+* Tailwind CSS
+* NPM
+* Node
+* Express
+* Faker
+* Husky
+* Lint Staged
+* Eslint
+* Standard Javascript Style
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+> ## Typescript Features
+
+* POO Avançado
+* Interface
+* Type Alias
+* Module
+* Utility Types
+* Modularização de Paths
+* Build
+* Deploy
+* Generics
+
+> ## Test Features
+
+* Unit Tests
+* Integration Tests
+* E2E Tests
+* Test Coverage
+* Test Doubles
+* Mocks
+* Stubs
+* Spies
+* Fakes
+* Dummies
+
+## Demo Images
+![alt text](image-1.png)
+![alt text](image-2.png)
+![alt text](image-3.png)
+
+## :file_folder: How to run the project
+
+Prerequisites: node.js, npm
+
+```bash
+# Clone repository
+git clone https://github.com/KlevertonOliveira/surveys-4dev.git
+
+# Enter project folder
+cd surveys-4dev/
+
+# Install dependencies
+npm install
+
+# Create a .env file in project's root and fill it following the template in .env.example file:
+VITE_API_URL="http://localhost:3001/api"
+
+# Run the project (in the root directory of the project!!!)
+npm start
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## :raising_hand_man: Author
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+**Kleverton Oliveira**
+
+https://www.linkedin.com/in/klevertonoliveira/
+
+---
