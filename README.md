@@ -1,6 +1,6 @@
 # **4Dev React - Surveys For Developers **
 
-The goal of this project is to practice building a system in ReactJS using modern technologies integrated into a well-defined, decoupled architecture. It employs TDD (Test-Driven Development) as a working methodology and Clean Architecture to distribute responsibilities across layers, while consistently adhering to SOLID, DRY, YAGNI, and KISS principles, and applying design patterns to address common challenges.
+This project focuses on building a system in React.js using modern technologies integrated into a well-defined, decoupled architecture. It employs TDD (Test-Driven Development) as a working methodology and Clean Architecture to distribute responsibilities across layers, while consistently adhering to SOLID, DRY, YAGNI, and KISS principles, and applying design patterns to address common challenges.
 <br /><br />
 
 > ## Principles
@@ -39,7 +39,6 @@ The goal of this project is to practice building a system in ReactJS using moder
 * Conventional Commits
 * GitFlow
 * Modular Design
-* Dependency Diagrams
 * Use Cases
 * Continuous Integration
 * Continuous Delivery
@@ -48,7 +47,7 @@ The goal of this project is to practice building a system in ReactJS using moder
 > ## Frameworks, Libs and Tools
 
 * Typescript
-* React
+* React.js
 * Context API
 * Tanstack Query
 * Tanstack Router
@@ -70,12 +69,11 @@ The goal of this project is to practice building a system in ReactJS using moder
 
 > ## Typescript Features
 
-* POO Avançado
+* Advanced OOP
 * Interface
 * Type Alias
 * Module
 * Utility Types
-* Modularização de Paths
 * Build
 * Deploy
 * Generics
@@ -95,11 +93,11 @@ The goal of this project is to practice building a system in ReactJS using moder
 
 ## Demo Images
 ##### Login page
-![alt text](/public/assets/image-1.png)
+![alt text](/assets/image-1.png)
 ##### Survey List
-![alt text](/public/assets/image-2.png)
+![alt text](/assets/image-2.png)
 ##### Survey Results
-![alt text](/public/assets/image-3.png)
+![alt text](/assets/image-3.png)
 
 ## :file_folder: How to run the project
 
