@@ -93,11 +93,11 @@ This project focuses on building a system in React.js using modern technologies 
 
 ## Demo Images
 ##### Login page
-![alt text](/assets/image-1.png)
+![alt text](/public/assets/image-1.png)
 ##### Survey List
-![alt text](/assets/image-2.png)
+![alt text](/public//assets/image-2.png)
 ##### Survey Results
-![alt text](/assets/image-3.png)
+![alt text](/public/assets/image-3.png)
 
 ## :file_folder: How to run the project
 
